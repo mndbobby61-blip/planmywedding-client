@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import QueryProvider from "@/lib/QueryProvider";
+import ReduxProvider from "@/store/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "PlanMyWedding.ai — Plan your dream wedding with AI",
@@ -18,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-body">
-        <QueryProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </QueryProvider>
+        <ReduxProvider>
+          <QueryProvider>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </QueryProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
