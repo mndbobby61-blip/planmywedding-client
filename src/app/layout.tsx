@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import QueryProvider from "@/lib/QueryProvider";
 
 export const metadata: Metadata = {
   title: "PlanMyWedding.ai — Plan your dream wedding with AI",
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-body">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <QueryProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );
