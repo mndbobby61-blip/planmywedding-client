@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-plum-700: #3c2a4d;
+  --color-plum-600: #4a2e63;
+  --color-gold-600: #b8894a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #faf7f5;
+  color: #2a2622;
+}
+
+.container-page {
+  @apply max-w-7xl mx-auto px-6 md:px-10;
+}
+
+.btn-primary {
+  @apply bg-plum-600 text-ivory font-body text-sm font-medium px-6 py-3 rounded-md hover:bg-plum-700 transition-colors;
+}
+
+.btn-secondary {
+  @apply border border-plum-600 text-plum-600 font-body text-sm px-6 py-3 rounded-md hover:bg-plum-50 transition-colors;
+}
