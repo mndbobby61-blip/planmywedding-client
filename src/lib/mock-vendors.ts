@@ -1,0 +1,41 @@
+import { Vendor } from "@/types/vendor.types";
+
+export const MOCK_VENDORS: Vendor[] = [
+  {
+    id: "v1",
+    name: "Riverside manor",
+    category: "venue",
+    location: "Dhaka",
+    priceFrom: 320000,
+    rating: 4.9,
+    guestCapacity: 300,
+    coverImage: "/vendors/riverside-manor.jpg",
+    gallery: [],
+    description: "A riverside garden venue with indoor and outdoor halls.",
+    createdAt: "2026-05-01",
+  },
+  {
+    id: "v2",
+    name: "Lensfolk studio",
+    category: "photography",
+    location: "Dhaka",
+    priceFrom: 85000,
+    rating: 4.8,
+    coverImage: "/vendors/lensfolk-studio.jpg",
+    gallery: [],
+    description: "Documentary-style wedding photography and same-day edits.",
+    createdAt: "2026-05-10",
+  },
+  {
+    id: "v3",
+    name: "Rupashi bridal",
+    category: "bridal",
+    location: "Chattogram",
+    priceFrom: 45000,
+    rating: 5.0,
+    coverImage: "/vendors/rupashi-bridal.jpg",
+    gallery: [],
+    description: "Bridal makeup and attire styling with trial sessions.",
+    createdAt: "2026-04-20",
+  },
+];
