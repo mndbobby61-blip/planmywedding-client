@@ -8,7 +8,12 @@ export default function VendorDetailsPage({ params }: { params: { id: string } }
 
   return (
     <section className="container-page py-10">
-      <div className="h-64 rounded-2xl bg-gradient-to-br from-plum-400 to-plum-700 mb-6" />
+      <div className="h-64 rounded-2xl overflow-hidden mb-6 bg-plum-50">
+        {vendor.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={vendor.coverImage} alt={vendor.name} className="w-full h-full object-cover" />
+        ) : null}
+      </div>
 
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2">

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const LOGGED_OUT_LINKS = [
   { href: "/vendors", label: "Vendors" },
@@ -10,9 +11,17 @@ const LOGGED_OUT_LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
+const LOGGED_IN_LINKS = [
+  ...LOGGED_OUT_LINKS,
+  { href: "/ai-chat", label: "AI chat" },
+  { href: "/items/manage", label: "My services" },
+];
+
 export default function Navbar() {
-  const [isLoggedIn] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const links = isAuthenticated ? LOGGED_IN_LINKS : LOGGED_OUT_LINKS;
 
   return (
     <header className="sticky top-0 z-50 bg-ivory border-b border-gold-200/40">
@@ -22,19 +31,30 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8 font-body text-sm text-charcoal">
-          {LOGGED_OUT_LINKS.map((link) => (
+          {links.map((link) => (
             <Link key={link.href} href={link.href} className="hover:text-plum-600 transition-colors">
               {link.label}
             </Link>
           ))}
-          {isLoggedIn ? (
-            <Link href="/dashboard" className="hover:text-plum-600 transition-colors">
-              Dashboard
+
+          {isAuthenticated ? (
+            <div className="flex items-center gap-3">
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-plum-600 text-ivory flex items-center justify-center text-xs font-medium">
+                  {user?.name?.[0]?.toUpperCase() ?? "U"}
+                </div>
+              )}
+              <button onClick={logout} className="btn-secondary">
+                Log out
+              </button>
+            </div>
+          ) : (
+            <Link href="/login" className="btn-primary">
+              Get started
             </Link>
-          ) : null}
-          <Link href="/login" className="btn-primary">
-            {isLoggedIn ? "My account" : "Get started"}
-          </Link>
+          )}
         </div>
 
         <button
@@ -48,14 +68,20 @@ export default function Navbar() {
 
       {isMenuOpen && (
         <div className="md:hidden container-page pb-4 flex flex-col gap-3 font-body text-sm text-charcoal">
-          {LOGGED_OUT_LINKS.map((link) => (
+          {links.map((link) => (
             <Link key={link.href} href={link.href} onClick={() => setIsMenuOpen(false)}>
               {link.label}
             </Link>
           ))}
-          <Link href="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary text-center">
-            {isLoggedIn ? "My account" : "Get started"}
-          </Link>
+          {isAuthenticated ? (
+            <button onClick={logout} className="btn-secondary text-center">
+              Log out
+            </button>
+          ) : (
+            <Link href="/login" onClick={() => setIsMenuOpen(false)} className="btn-primary text-center">
+              Get started
+            </Link>
+          )}
         </div>
       )}
     </header>

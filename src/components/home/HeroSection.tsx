@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const SLIDES = [
-  { label: "Ceremony decor", gradient: "from-[#6E4C87] to-[#3C2A4D]" },
-  { label: "Riverside venue", gradient: "from-[#D9B26C] to-[#8A6234]" },
-  { label: "Bridal moments", gradient: "from-[#9C3D6B] to-[#5A1F3D]" },
-  { label: "Table styling", gradient: "from-[#8C6BA0] to-[#3C2A4D]" },
+  { label: "Ceremony decor", image: "https://picsum.photos/seed/pmw-decor/800/600" },
+  { label: "Riverside venue", image: "https://picsum.photos/seed/pmw-venue/800/600" },
+  { label: "Bridal moments", image: "https://picsum.photos/seed/pmw-bridal/800/600" },
+  { label: "Table styling", image: "https://picsum.photos/seed/pmw-table/800/600" },
 ];
 
 export default function HeroSection() {
@@ -44,10 +44,12 @@ export default function HeroSection() {
         {SLIDES.map((slide, i) => (
           <div
             key={slide.label}
-            className={`absolute inset-0 bg-gradient-to-br ${slide.gradient} flex items-end p-4 animate-hero-fade`}
+            className="absolute inset-0 animate-hero-fade"
             style={{ animationDelay: `${i * 4}s` }}
           >
-            <span className="font-body text-xs text-white bg-black/20 px-3 py-1.5 rounded-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={slide.image} alt={slide.label} className="w-full h-full object-cover" />
+            <span className="absolute bottom-4 left-4 font-body text-xs text-white bg-black/40 px-3 py-1.5 rounded-full">
               {slide.label}
             </span>
           </div>

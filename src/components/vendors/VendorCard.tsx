@@ -2,21 +2,18 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import { Vendor } from "@/types/vendor.types";
 
-const CATEGORY_GRADIENT: Record<Vendor["category"], string> = {
-  venue: "from-[#6E4C87] to-[#3C2A4D]",
-  photography: "from-[#D9B26C] to-[#8A6234]",
-  bridal: "from-[#9C3D6B] to-[#5A1F3D]",
-  catering: "from-[#8C6BA0] to-[#5A3D74]",
-  decor: "from-[#E0C68F] to-[#B8894A]",
-};
-
 export default function VendorCard({ vendor }: { vendor: Vendor }) {
   return (
     <Link
       href={`/vendors/${vendor.id}`}
       className="block bg-white rounded-xl border border-gold-200/40 overflow-hidden hover:border-plum-400/60 transition-colors"
     >
-      <div className={`h-24 bg-gradient-to-br ${CATEGORY_GRADIENT[vendor.category]}`} />
+      <div className="h-24 overflow-hidden bg-plum-50">
+        {vendor.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={vendor.coverImage} alt={vendor.name} className="w-full h-full object-cover" loading="lazy" />
+        ) : null}
+      </div>
       <div className="p-3">
         <p className="text-sm font-medium text-charcoal mb-1 truncate">{vendor.name}</p>
         <p className="text-xs text-charcoal/60 mb-2 truncate">
