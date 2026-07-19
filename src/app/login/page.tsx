@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/axios";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
 
-export default function LoginPage() {
+// ১. মূল লগইন ফর্মের লজিক ও UI আলাদা করে একটি ইন্টারনাল কম্পোনেন্টে রাখা হলো
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -123,5 +124,14 @@ export default function LoginPage() {
         </Link>
       </p>
     </section>
+  );
+}
+
+// ২. মূল এক্সপোর্ট ফাইল যা LoginForm টিকে Suspense দিয়ে র্যাপ করছে
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-16 font-body text-sm text-charcoal/60">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }
