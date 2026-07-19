@@ -12,7 +12,7 @@ export default function FeaturedVendors() {
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {MOCK_VENDORS.map((vendor) => (
+        {MOCK_VENDORS.slice(0, 8).map((vendor) => (
           <VendorCard key={vendor.id} vendor={vendor} />
         ))}
       </div>
