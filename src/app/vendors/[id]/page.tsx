@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { MOCK_VENDORS } from "@/lib/mock-vendors";
 import { Star, MapPin, Users } from "lucide-react";
+import BookingSection from "@/components/vendors/BookingSection";
+import FavouriteButton from "@/components/vendors/FavouriteButton";
 
 export default function VendorDetailsPage({ params }: { params: { id: string } }) {
   const vendor = MOCK_VENDORS.find((v) => v.id === params.id);
@@ -8,7 +10,10 @@ export default function VendorDetailsPage({ params }: { params: { id: string } }
 
   return (
     <section className="container-page py-10">
-      <div className="h-64 rounded-2xl overflow-hidden mb-6 bg-plum-50">
+      <div className="h-64 rounded-2xl overflow-hidden mb-6 bg-plum-50 relative">
+        <div className="absolute top-4 right-4 z-10">
+          <FavouriteButton vendorId={vendor.id} />
+        </div>
         {vendor.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={vendor.coverImage} alt={vendor.name} className="w-full h-full object-cover" />
@@ -39,13 +44,7 @@ export default function VendorDetailsPage({ params }: { params: { id: string } }
           <p className="font-body text-sm text-charcoal/50">No reviews yet. Be the first to book and review.</p>
         </div>
 
-        <aside className="bg-white rounded-xl border border-gold-200/60 p-5 h-fit">
-          <p className="font-body text-xs text-charcoal/50 mb-1">Starting from</p>
-          <p className="font-display text-2xl text-plum-700 mb-4">
-            ৳{vendor.priceFrom.toLocaleString()}
-          </p>
-          <button className="btn-primary w-full">Request booking</button>
-        </aside>
+        <BookingSection vendorId={vendor.id} priceFrom={vendor.priceFrom} />
       </div>
     </section>
   );

@@ -21,7 +21,13 @@ export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const links = isAuthenticated ? LOGGED_IN_LINKS : LOGGED_OUT_LINKS;
+  const links = isAuthenticated
+    ? [
+        ...LOGGED_IN_LINKS,
+        { href: "/dashboard", label: "Dashboard" },
+        ...(user?.role === "admin" ? [{ href: "/admin", label: "Admin Panel" }] : []),
+      ]
+    : LOGGED_OUT_LINKS;
 
   return (
     <header className="sticky top-0 z-50 bg-ivory border-b border-gold-200/40">

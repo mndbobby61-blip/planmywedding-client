@@ -27,7 +27,7 @@ export default function ChatWindow() {
     setIsThinking(true);
 
     try {
-      const token = localStorage.getItem("token") || "";
+      const token = localStorage.getItem("pmw_token") || "";
       const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
       const res = await fetch(`${API_BASE}/ai/chat/stream`, {
         method: "POST",
@@ -36,7 +36,7 @@ export default function ChatWindow() {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         // Optionally pass sessionId if you want to maintain context on backend
-        body: JSON.stringify({ message: text, sessionId: "default" }),
+        body: JSON.stringify({ message: text }),
       });
 
       if (!res.ok) throw new Error("Failed to send message");
@@ -73,6 +73,15 @@ export default function ChatWindow() {
                       prev.map((msg) =>
                         msg.id === assistantMessageId
                           ? { ...msg, content: msg.content + data.chunk }
+                          : msg
+                      )
+                    );
+                  }
+                  if (data.error) {
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMessageId
+                          ? { ...msg, content: msg.content + "\n\n**Error:** " + data.error }
                           : msg
                       )
                     );

@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { Vendor } from "@/types/vendor.types";
+import FavouriteButton from "./FavouriteButton";
 
 export default function VendorCard({ vendor }: { vendor: Vendor }) {
   return (
     <Link
       href={`/vendors/${vendor.id}`}
-      className="block bg-white rounded-xl border border-gold-200/40 overflow-hidden hover:border-plum-400/60 transition-colors"
+      className="block bg-white rounded-xl border border-gold-200/40 overflow-hidden hover:border-plum-400/60 transition-colors relative"
     >
+      <div className="absolute top-2 right-2 z-10">
+        <FavouriteButton vendorId={vendor._id} />
+      </div>
       <div className="h-24 overflow-hidden bg-plum-50">
         {vendor.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
