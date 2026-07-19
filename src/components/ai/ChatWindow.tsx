@@ -26,20 +26,77 @@ export default function ChatWindow() {
     setInput("");
     setIsThinking(true);
 
-    // TODO: replace with a real streaming call to POST /api/ai/chat
-    // Keep conversation history (messages) in the request body for context.
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    try {
+      const token = localStorage.getItem("token") || "";
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+      const res = await fetch(`${API_BASE}/ai/chat/stream`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        // Optionally pass sessionId if you want to maintain context on backend
+        body: JSON.stringify({ message: text, sessionId: "default" }),
+      });
 
-    setIsThinking(false);
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content:
-          "Got it. For that budget and guest count, I would suggest splitting roughly 40 percent venue, 25 percent catering, and the rest across decor and photography. Want me to pull matching venues now?",
-      },
-    ]);
+      if (!res.ok) throw new Error("Failed to send message");
+      
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      setIsThinking(false);
+      const assistantMessageId = crypto.randomUUID();
+      
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: assistantMessageId,
+          role: "assistant",
+          content: "",
+        },
+      ]);
+
+      if (reader) {
+        let done = false;
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) {
+            const chunkText = decoder.decode(value, { stream: true });
+            const lines = chunkText.split("\n");
+            for (const line of lines) {
+              if (line.startsWith("data: ") && line !== "data: [DONE]") {
+                try {
+                  const data = JSON.parse(line.replace("data: ", ""));
+                  if (data.chunk) {
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMessageId
+                          ? { ...msg, content: msg.content + data.chunk }
+                          : msg
+                      )
+                    );
+                  }
+                } catch (e) {
+                  console.error("Error parsing stream chunk:", e);
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      setIsThinking(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: "Sorry, I am having trouble connecting to the server.",
+        },
+      ]);
+    }
   };
 
   return (
