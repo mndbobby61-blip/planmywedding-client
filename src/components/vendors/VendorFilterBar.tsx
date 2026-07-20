@@ -6,8 +6,10 @@ import { VendorFilters } from "@/types/vendor.types";
 
 export default function VendorFilterBar({
   onChange,
+  initialCategory = "",
 }: {
   onChange: (filters: VendorFilters) => void;
+  initialCategory?: string;
 }) {
   const [search, setSearch] = useState("");
 
@@ -25,6 +27,19 @@ export default function VendorFilterBar({
           className="flex-1 text-sm font-body focus:outline-none bg-transparent"
         />
       </div>
+
+      <select
+        defaultValue={initialCategory}
+        onChange={(e) => onChange({ category: (e.target.value || undefined) as any })}
+        className="border border-gold-200/60 rounded-lg px-4 py-2.5 text-sm font-body bg-white"
+      >
+        <option value="">All Categories</option>
+        <option value="venue">Venue</option>
+        <option value="photography">Photography</option>
+        <option value="catering">Catering</option>
+        <option value="bridal">Bridal</option>
+        <option value="decor">Decor</option>
+      </select>
 
       <select
         onChange={(e) => onChange({ location: e.target.value || undefined })}

@@ -30,7 +30,7 @@ export default function VendorCard({ vendor }: { vendor: Vendor }) {
           </span>
           <span className="flex items-center gap-1 text-xs text-gold-600">
             <Star size={12} fill="currentColor" strokeWidth={0} />
-            {vendor.rating.toFixed(1)}
+            {(vendor.rating || 0).toFixed(1)}
           </span>
         </div>
       </div>

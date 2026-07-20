@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Eye, Trash2 } from "lucide-react";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
-import { MOCK_VENDORS } from "@/lib/mock-vendors";
+import { useMyVendors } from "@/features/vendors/useVendors";
+import { useDeleteVendor } from "@/features/vendors/useVendorMutations";
 
 export default function ManageItemsPage() {
-  const [items, setItems] = useState(MOCK_VENDORS);
+  const { data: items = [], isLoading, isError } = useMyVendors();
+  const { mutate: deleteVendor } = useDeleteVendor();
 
   const handleDelete = (id: string) => {
-    // TODO: call DELETE /api/vendors/:id once backend is ready
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    if (confirm("Are you sure you want to delete this listing?")) {
+      deleteVendor(id);
+    }
   };
 
   return (
@@ -19,7 +21,11 @@ export default function ManageItemsPage() {
       <section className="container-page py-10">
         <h1 className="font-display text-2xl text-plum-700 mb-6">My listed services</h1>
 
-        {items.length === 0 ? (
+        {isLoading ? (
+          <p className="font-body text-sm text-charcoal/60">Loading your services...</p>
+        ) : isError ? (
+          <p className="font-body text-sm text-blush-800">Failed to load services.</p>
+        ) : items.length === 0 ? (
           <p className="font-body text-sm text-charcoal/60">
             You haven&apos;t listed anything yet.{" "}
             <Link href="/items/add" className="text-plum-600 hover:underline">
@@ -44,7 +50,7 @@ export default function ManageItemsPage() {
                     <td className="px-4 py-3">{item.name}</td>
                     <td className="px-4 py-3 capitalize">{item.category}</td>
                     <td className="px-4 py-3">৳{item.priceFrom.toLocaleString()}</td>
-                    <td className="px-4 py-3">{item.rating.toFixed(1)}</td>
+                    <td className="px-4 py-3">{item.rating?.toFixed(1) || "N/A"}</td>
                     <td className="px-4 py-3 flex gap-3">
                       <Link href={`/vendors/${item.id}`} aria-label="View" className="text-plum-600">
                         <Eye size={16} />

@@ -1,19 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { Vendor, VendorFilters } from "@/types/vendor.types";
-import { MOCK_VENDORS } from "@/lib/mock-vendors";
+
+export interface VendorSearchResponse {
+  vendors: Vendor[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    totalResults: number;
+  };
+}
 
 export function useVendors(filters: VendorFilters) {
   return useQuery({
     queryKey: ["vendors", filters],
+    queryFn: async (): Promise<VendorSearchResponse> => {
+      const { data } = await api.get<VendorSearchResponse>("/vendors", { params: filters });
+      return data;
+    },
+  });
+}
+
+export function useMyVendors() {
+  return useQuery({
+    queryKey: ["vendors", "mine"],
     queryFn: async (): Promise<Vendor[]> => {
-      try {
-        const { data } = await api.get<Vendor[]>("/vendors", { params: filters });
-        return data;
-      } catch {
-        // Falls back to local mock data until the backend endpoint exists.
-        return MOCK_VENDORS;
-      }
+      const { data } = await api.get<Vendor[]>("/vendors/mine");
+      return data;
     },
   });
 }

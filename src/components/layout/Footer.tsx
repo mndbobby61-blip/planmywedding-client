@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 const COLUMNS = [
   {
@@ -34,9 +35,20 @@ export default function Footer() {
           <p className="font-display text-lg mb-3">
             PlanMyWedding<span className="text-gold-400">.ai</span>
           </p>
-          <p className="text-sm text-plum-200 max-w-xs">
+          <p className="text-sm text-plum-200 max-w-xs mb-6">
             AI-matched venues, photographers and caterers for your wedding day.
           </p>
+          <div className="flex items-center gap-4 text-plum-200">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-ivory transition-colors">
+              <Facebook size={20} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-ivory transition-colors">
+              <Instagram size={20} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-ivory transition-colors">
+              <Twitter size={20} />
+            </a>
+          </div>
         </div>
 
         {COLUMNS.map((col) => (
